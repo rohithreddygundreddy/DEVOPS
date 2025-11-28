@@ -1,5 +1,5 @@
 def call(Map config=[:]){
-    string repoUrl=config.get('repoUrl', 'https://github.com/rohithreddygundreddy/DEVOPS.git')
+    string repoUrl=config.get('repoUrl', 'git@github.com:rohithreddygundreddy/simple-flask-backend.git')
     string branch=config.get('branch', 'main')
     string credentialsId=config.get('credentialsId','null')
     string requirements=config.get('requirements', 'requirmenents.txt')
