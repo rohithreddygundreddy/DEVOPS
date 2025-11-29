@@ -1,45 +1,59 @@
-def call(Map config = [:]) {
+def call(Map config=[:]){
 
-    String repoUrl       = config.get('repoUrl', 'git@github.com:rohithreddygundreddy/DEVOPS.git')
-    String branch        = config.get('branch', 'main')
+    String repoUrl = config.get('repoUrl')
+    String branch  = config.get('branch', 'main')
     String credentialsId = config.get('credentialsId', null)
     String requirements  = config.get('requirements', 'requirements.txt')
 
-    if (!repoUrl) {
-        error "repoUrl is required!"
-    }
-
-    stage('Clone Repository') {
+    stage('Clone Repository'){
         repo_checkout(repoUrl, branch, credentialsId)
     }
 
-    stage('Setup Python Environment') {
-        sh """
-            python3 --version
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip
-        """
+    stage('Setup Python Environment'){
+        if (isUnix()) {
+            sh """
+                python3 --version
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+            """
+        } else {
+            bat """
+                python --version
+                python -m venv venv
+                call venv\\Scripts\\activate
+                pip install --upgrade pip
+            """
+        }
     }
 
-    stage('Install Dependencies') {
-        sh """
-            . venv/bin/activate
-            if [ -f ${requirements} ]; then
+    stage('Install Dependencies'){
+        if (isUnix()) {
+            sh """
+                . venv/bin/activate
                 pip install -r ${requirements}
-            else
-                echo 'No ${requirements} file found, skipping dependencies.'
-            fi
-        """
+            """
+        } else {
+            bat """
+                call venv\\Scripts\\activate
+                pip install -r ${requirements}
+            """
+        }
     }
 
-    stage('Run Python Build / Tests') {
-        sh """
-            . venv/bin/activate
-            python -m py_compile \$(find . -name "*.py") || true
-            pytest || true
-        """
+    stage('Run Python Build / Tests'){
+        if (isUnix()) {
+            sh """
+                . venv/bin/activate
+                python -m py_compile \$(find . -name "*.py")
+            """
+        } else {
+            bat """
+                call venv\\Scripts\\activate
+                python -m py_compile $(git ls-files "*.py")
+            """
+        }
     }
 
-    echo 'Python build completed successfully!'
+    echo "Python build completed successfully!"
 }
