@@ -31,7 +31,8 @@ def call(Map config=[:]) {
     stage("Run Python Build/Tests") {
         bat """
             call venv\\Scripts\\activate
-            "${python}" -m compileall src
+            python -m pip install pytest
+
             pytest || echo Tests failed but continuing...
         """
     }
