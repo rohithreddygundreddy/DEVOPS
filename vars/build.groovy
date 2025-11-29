@@ -19,11 +19,12 @@ def call(Map config = [:]) {
             """
         } else {
             bat """
-                python --version
-                python -m venv venv
+                "C:\\Users\\srija\\AppData\\Local\\Programs\\Python\\Python314\\python.exe" --version
+                "C:\\Users\\srija\\AppData\\Local\\Programs\\Python\\Python314\\python.exe" -m venv venv
                 call venv\\Scripts\\activate
                 pip install --upgrade pip
             """
+
         }
     }
 
