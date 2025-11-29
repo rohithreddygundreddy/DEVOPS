@@ -21,4 +21,3 @@ def call(String repoUrl, String branch = 'main', String credentialsId = null) {
         }
     }
 }
--0
