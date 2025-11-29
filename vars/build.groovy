@@ -1,15 +1,15 @@
-def call(Map config=[:]){
+def call(Map config = [:]) {
 
-    String repoUrl = config.get('repoUrl')
-    String branch  = config.get('branch', 'main')
+    String repoUrl       = config.get('repoUrl')
+    String branch        = config.get('branch', 'main')
     String credentialsId = config.get('credentialsId', null)
     String requirements  = config.get('requirements', 'requirements.txt')
 
-    stage('Clone Repository'){
+    stage('Clone Repository') {
         repo_checkout(repoUrl, branch, credentialsId)
     }
 
-    stage('Setup Python Environment'){
+    stage('Setup Python Environment') {
         if (isUnix()) {
             sh """
                 python3 --version
@@ -27,7 +27,7 @@ def call(Map config=[:]){
         }
     }
 
-    stage('Install Dependencies'){
+    stage('Install Dependencies') {
         if (isUnix()) {
             sh """
                 . venv/bin/activate
@@ -41,16 +41,17 @@ def call(Map config=[:]){
         }
     }
 
-    stage('Run Python Build / Tests'){
+    stage('Run Python Build / Tests') {
         if (isUnix()) {
             sh """
                 . venv/bin/activate
                 python -m py_compile \$(find . -name "*.py")
             """
         } else {
+            // WINDOWS FIX: no $()
             bat """
                 call venv\\Scripts\\activate
-                python -m py_compile $(git ls-files "*.py")
+                for /R %%f in (*.py) do python -m py_compile "%%f"
             """
         }
     }
