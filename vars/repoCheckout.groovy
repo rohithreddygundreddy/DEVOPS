@@ -1,28 +1,31 @@
-def call(map config =[:]){
-    def repoUrl=config.repoUrldef
-    def branch=config.get('branch','main')
-    def credentialsId=config.get('credentialsId','')
-    def dirName=config.get('dir','')
-    if (!repoUrl){
-        error 'repoCheckout: 'repoUrl' is requred'
+// vars/repoCheckout.groovy
+
+def call(Map config = [:]) {
+    def repoUrl       = config.repoUrl
+    def branch        = config.get('branch', 'main')
+    def credentialsId = config.get('credentialsId', '')
+    def dirName       = config.get('dir', '')
+
+    if (!repoUrl) {
+        error "repoCheckout: 'repoUrl' is required"
     }
 
-    if (dirName){
-        dir(dirName){
-            checkOutRepo(repoUrl, branch, credentialsId)
+    if (dirName) {
+        dir(dirName) {
+            checkoutRepo(repoUrl, branch, credentialsId)
         }
-    }else{
+    } else {
         checkoutRepo(repoUrl, branch, credentialsId)
     }
 }
 
-private void checkoutRepo(Stirng repoUrl, String branch, String credentialsId){
+private void checkoutRepo(String repoUrl, String branch, String credentialsId) {
     checkout([
         $class: 'GitSCM',
-        branch: [[name: '*/${branch}']],
-        userRemoteconfigs: [[
+        branches: [[name: "*/${branch}"]],
+        userRemoteConfigs: [[
             url: repoUrl,
-            credentialsId:credentialsId
+            credentialsId: credentialsId
         ]]
     ])
 }
