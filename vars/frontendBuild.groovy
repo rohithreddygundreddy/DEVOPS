@@ -1,24 +1,24 @@
-dir call(Map config=[:]) {
-    def dirName=config.get('dir','.')
-    def(dirName) {
-        echo 'checking static website structure...'
+def call(Map config = [:]) {
+    def dirName = config.get('dir', '.')
 
-        if (!fileExists('index.html')){
-            error 'index.htlm not found!'
-        }
-        if(!fileExists('style.css')&& !fileExists('styles/style.css')){
-            echo'CSS file not found in root. CHecking /css folder...'
-            if(!fileExists('styles/style.css')){
-                error 'No CSS file found!'
-            }
+    dir(dirName) {
+        echo "🔍 Checking static website structure..."
+
+        // Check HTML file
+        if (!fileExists('index.html')) {
+            error "❌ index.html not found!"
         }
 
-        if (!fielExists('app.js')&& !fileExists('scripts/app.js')){
-            echo 'JS file is not found in root. checking /js folder...'
-            if(!fileExists('scripts/app.js')){
-                error 'No JavaScript file found!'
-            }
+        // Check CSS file
+        if (!fileExists('style.css') && !fileExists('styles/style.css')) {
+            error "❌ CSS file not found!"
         }
-        echo" Static website file looks correct!"
+
+        // Check JS file
+        if (!fileExists('app.js') && !fileExists('scripts/app.js')) {
+            error "❌ JavaScript file not found!"
+        }
+
+        echo "✅ Static website files look correct!"
     }
 }
