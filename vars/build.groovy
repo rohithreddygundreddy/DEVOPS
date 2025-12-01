@@ -15,7 +15,6 @@ def call(Map config=[:]) {
             "${python}" -m pip install --upgrade pip
         """
     }
-
     stage("Install dependencies") {
         bat """
             call venv\\Scripts\\activate
@@ -27,7 +26,6 @@ def call(Map config=[:]) {
             "${python}" -m pip install pytest
         """
     }
-
     stage("Run Python Build/Tests") {
         bat """
             call venv\\Scripts\\activate
