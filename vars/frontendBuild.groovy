@@ -1,5 +1,5 @@
 dir call(Map config=[:]){
-    def dirName=config.get('dir','')
+    def dirName=config.get('dir','.')
     def(dirName){
         echo 'checking static website structure...'
 
