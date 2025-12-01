@@ -3,12 +3,12 @@ dir call(Map config=[:]){
     def(dirName){
         echo 'checking static website structure...'
 
-        if (!fileExists('indec.html')){
+        if (!fileExists('index.html')){
             error 'indec.htlm not found!'
         }
-        if(!fileExists('style.css')&& !fileExists('css/stylr.css')){
+        if(!fileExists('style.css')&& !fileExists('styles/style.css')){
             echo'CSS file not found in root. CHecking /css folder...'
-            if(!fileExists('css/stylr.css')){
+            if(!fileExists('styles/stylr.css')){
                 error 'No CSS file found!'
             }
         }
